@@ -89,54 +89,6 @@ get_batch_between = function(data, from, to)
     return batch
 end
 
-
---- Get minumum value and index of tensor
-min = function(tensor)
-    local val = tensor[1]
-    local index = 1
-    for i = 2, (#tensor)[1], 1 do
-        if tensor[i] < val then
-            val = tensor[i]
-            index = i
-        end
-    end
-    return val, index
-end
-
---- Get maximum value and index of tensor
-max = function(tensor)
-    local val = tensor[1]
-    local index = 1
-    for i = 2, (#tensor)[1], 1 do
-        if tensor[i] > val then
-            val = tensor[i]
-            index = i
-        end
-    end
-    return val, index
-end
-
-percent_correct = function(labels, predictions)
-  local corr = 0
-  local n = (#labels)[1]
-  for i=1, n, 1 do
-    if labels[i] == predictions[i] then
-      corr = corr + 1
-    end
-  end
-  return (corr/n)*100
-end
-
-predictions_to_labels = function(predictions)
-  local n = (#predictions)[1]
-  local labels = torch.LongTensor(n)
-  for i=1, n, 1 do
-    val, idx = max(predictions[i])
-    labels[i] = idx
-  end
-  return labels
-end
-
 printf = function(s,...)
    return io.write(s:format(...))
 end -- function
