@@ -3,7 +3,8 @@ require 'optim'
 
 function train(dataset, opt, net, criterion, sgdState, confusion)
   confusion:zero()
-  parameters,gradParameters = net:getParameters()
+  local parameters,gradParameters = net:getParameters()
+  n_correct = 0
   for i = 1, dataset:size(), opt.batch_size do
       -- Collect the training data for this batch
       local batch = get_batch_between(dataset,i, i+opt.batch_size)
@@ -33,6 +34,14 @@ function train(dataset, opt, net, criterion, sgdState, confusion)
             confusion:add(outputs[j], targets[j])
          end
 
+         -- Keep up n_correct
+         for j = 1,math.min(opt.batch_size, (#batch.label)[1]) do
+            _, max = outputs[j]:max(1)
+            if max[1] == batch.label[j] then
+              n_correct = n_correct + 1
+            end
+         end
+
          -- estimate df/dW
          local df_do = criterion:backward(outputs, targets)
          net:backward(inputs, df_do)
@@ -51,6 +60,7 @@ function train(dataset, opt, net, criterion, sgdState, confusion)
   end
   print('-----------Trainset----------')
   print(confusion)
+  print('n_correct', n_correct, 'percent', (n_correct/dataset:size())*100)
   return sgdState
 end
 
@@ -74,4 +84,5 @@ function test(dataset, opt, net, confusion)
   end
 
   print('-----------Testset----------')
-  print(confusion)end
+  print(confusion)
+end
