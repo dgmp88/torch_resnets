@@ -4,7 +4,7 @@ require 'optim'
 require 'datasets'
 require 'mytrainer'
 
-local opt = lapp[[
+opt = lapp[[
    -r,--learning_rate  (default 0.1)        learning rate
    -d,--learning_rate_decay   (default 0.0001)   learning rate decay
    -b,--batch_size     (default 128)          batch size

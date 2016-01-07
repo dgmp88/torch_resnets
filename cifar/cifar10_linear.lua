@@ -4,7 +4,7 @@ require 'optim'
 require 'datasets'
 require 'mytrainer'
 
-local opt = lapp[[
+opt = lapp[[
    -r,--learning_rate  (default 0.1)        learning rate
    -d,--learning_rate_decay   (default 5e-4)   learning rate decay
    -b,--batch_size     (default 256)          batch size
@@ -36,12 +36,13 @@ if opt.pardowndata == 1 then
 end
 collectgarbage()
 
--- A convolutional nngraph
+-- A simple linear network
 build_linear = function()
   lastsize = 3*32*32
   view1 = nn.View(lastsize)()
   line1 = nn.Linear(lastsize,10)(view1)
   logs1 = nn.LogSoftMax()(line1)
+
   --
   lin = nn.gModule({view1}, {logs1})
   return lin
